@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: vaishnavi-portfolio
+    env: static
+    buildCommand: bash build.sh
+    staticPublishPath: build/web
