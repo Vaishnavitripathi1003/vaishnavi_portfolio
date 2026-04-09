@@ -70,13 +70,6 @@ class ProcessStepModel {
 
 const List<ProjectModel> projects = [
   ProjectModel(
-    emoji: '🚌',
-    title: 'Bus Booking App',
-    description:
-        'Full-featured inter-city bus booking with real-time seat selection, route tracking, payment gateway, and booking history. Built for Android & iOS.',
-    tags: ['Flutter', 'Firebase', 'Maps API'],
-  ),
-  ProjectModel(
     emoji: '🛍️',
     title: 'E-Commerce App',
     description:
@@ -167,7 +160,7 @@ const List<ServiceModel> services = [
   ),
   ServiceModel(
     number: '02',
-    title: 'Flutter Web & SaaS Apps',
+    title: 'Flutter Web Apps',
     description:
         'Responsive web apps and dashboards built with Flutter Web — one codebase, all platforms.',
     items: [

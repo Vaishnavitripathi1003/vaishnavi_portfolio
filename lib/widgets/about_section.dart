@@ -21,21 +21,25 @@ class AboutSection extends StatelessWidget {
       ),
       child: isWide
           ? Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(child: _leftContent()),
-                const SizedBox(width: 60),
-                Expanded(child: _skillsGrid()),
-              ],
-            )
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(child: _leftContent()),
+          const SizedBox(width: 60),
+          Expanded(child: _skillsGrid()),
+          const SizedBox(width: 60),
+          Expanded(child: _photoColumn()),
+        ],
+      )
           : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _leftContent(),
-                const SizedBox(height: 40),
-                _skillsGrid(),
-              ],
-            ),
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _leftContent(),
+          const SizedBox(height: 40),
+          _skillsGrid(),
+          const SizedBox(height: 40),
+          _photoColumn(),
+        ],
+      ),
     );
   }
 
@@ -95,10 +99,51 @@ class AboutSection extends StatelessWidget {
     return Column(
       children: skills
           .map((s) => Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: _SkillItem(skill: s),
-              ))
+        padding: const EdgeInsets.only(bottom: 10),
+        child: _SkillItem(skill: s),
+      ))
           .toList(),
+    );
+  }
+
+  Widget _photoColumn() {
+    return Column(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.accent.withOpacity(0.3),
+                blurRadius: 20,
+                spreadRadius: 5,
+              ),
+            ],
+          ),
+          child: CircleAvatar(
+            radius: 120,
+            backgroundColor: AppColors.surface2,
+            backgroundImage: AssetImage('assets/profile.jpeg'), // Replace with your actual image path
+          ),
+        ),
+        const SizedBox(height: 16),
+        Text(
+          'Vaishnavi Tripathi', // Replace with your name
+          style: GoogleFonts.syne(
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            color: AppColors.text,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          'App',
+          style: GoogleFonts.syne(
+            fontSize: 14,
+            color: AppColors.accent,
+          ),
+        ),
+      ],
     );
   }
 }
@@ -195,7 +240,7 @@ class _SkillItemState extends State<_SkillItem>
                     value: _barAnim.value,
                     backgroundColor: AppColors.surface2,
                     valueColor:
-                        const AlwaysStoppedAnimation<Color>(AppColors.accent),
+                    const AlwaysStoppedAnimation<Color>(AppColors.accent),
                     minHeight: 3,
                   ),
                 ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../theme/app_theme.dart';
 import 'common_widgets.dart';
 
@@ -26,10 +27,8 @@ class _ContactSectionState extends State<ContactSection> {
     super.dispose();
   }
 
-  void _submit() {
-    if (_nameCtrl.text.isEmpty || _emailCtrl.text.isEmpty) return;
-    setState(() => _sent = true);
-  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +58,19 @@ class _ContactSectionState extends State<ContactSection> {
             ),
     );
   }
+  Future<void> _openEmail() async {
+    final email = 'vaishnavitripathi1003@gmail.com';
 
+    final Uri emailUri = Uri(
+      scheme: 'mailto',
+      path: email,
+      query: Uri.encodeFull(
+        'subject=Let\'s Connect&body=Hi, I visited your portfolio and would like to discuss a project.',
+      ),
+    );
+
+    await launchUrl(emailUri, mode: LaunchMode.externalApplication);
+  }
   Widget _leftContent(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,9 +80,11 @@ class _ContactSectionState extends State<ContactSection> {
         SectionTitle("Let's build something ", highlighted: 'great together', fontSize: 36),
         const SizedBox(height: 24),
         GestureDetector(
-          onTap: () {},
+          onTap: () {
+            _openEmail();
+          },
           child: Text(
-            'vaishnavi@email.com',
+            'vaishnavitripathi1003@gmail.com',
             style: GoogleFonts.fraunces(
               fontSize: 22,
               fontWeight: FontWeight.w300,
@@ -84,9 +97,18 @@ class _ContactSectionState extends State<ContactSection> {
         Wrap(
           spacing: 10,
           runSpacing: 10,
-          children: ['LinkedIn', 'GitHub', 'Upwork', 'Fiverr']
-              .map((s) => _SocialChip(label: s))
-              .toList(),
+          children: [
+            _SocialChip(
+              label: 'LinkedIn',
+              onTap: () => _openLink('www.linkedin.com/in/vaishnavi-tripathi-805690249'),
+            ),
+            _SocialChip(
+              label: 'GitHub',
+              onTap: () => _openLink('https://github.com/Vaishnavitripathi1003'),
+            ),
+            _SocialChip(label: 'Upwork'),
+            _SocialChip(label: 'Fiverr'),
+          ],
         ),
         const SizedBox(height: 28),
         Text(
@@ -153,11 +175,11 @@ class _ContactSectionState extends State<ContactSection> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _FormField(label: 'Your name', hint: 'Rahul Verma', controller: _nameCtrl),
+        _FormField(label: 'Your name', hint: 'Vaishnavi Tripathi', controller: _nameCtrl),
         const SizedBox(height: 14),
         _FormField(
             label: 'Email address',
-            hint: 'rahul@company.com',
+            hint: 'vaishnavitripathi1003@gmail.com',
             controller: _emailCtrl),
         const SizedBox(height: 14),
         _FormField(
@@ -194,6 +216,33 @@ class _ContactSectionState extends State<ContactSection> {
         ),
       ],
     );
+  }
+  void _submit() async {
+    if (_nameCtrl.text.isEmpty || _emailCtrl.text.isEmpty) return;
+
+    final Uri emailUri = Uri(
+      scheme: 'mailto',
+      path: 'vaishnavitripathi1003@gmail.com',
+      query: Uri.encodeFull(
+        'subject=Portfolio Contact from ${_nameCtrl.text}'
+            '&body='
+            'Name: ${_nameCtrl.text}\n'
+            'Email: ${_emailCtrl.text}\n'
+            'Project: ${_projectCtrl.text}\n'
+            'Message: ${_messageCtrl.text}',
+      ),
+    );
+
+    await launchUrl(emailUri, mode: LaunchMode.externalApplication);
+
+    setState(() => _sent = true);
+  }
+
+  Future<void> _openLink(String url) async {
+    final uri = Uri.parse(url);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      throw 'Could not launch $url';
+    }
   }
 }
 
@@ -257,12 +306,16 @@ class _FormField extends StatelessWidget {
 
 class _SocialChip extends StatefulWidget {
   final String label;
-  const _SocialChip({required this.label});
+  final VoidCallback? onTap;
+
+  const _SocialChip({
+    required this.label,
+    this.onTap,
+  });
 
   @override
   State<_SocialChip> createState() => _SocialChipState();
 }
-
 class _SocialChipState extends State<_SocialChip> {
   bool _hovered = false;
 
@@ -297,4 +350,5 @@ class _SocialChipState extends State<_SocialChip> {
       ),
     );
   }
+
 }
